@@ -9,7 +9,7 @@ exports.postAddProduct = (req, res, next) => {
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    Product.create({
+    req.user.createProduct({
         title: title,
         price: price,
         imageUrl: imageUrl,
@@ -29,15 +29,16 @@ exports.getEditProduct = (req, res, next) => {
         return res.redirect('/');
     }
     const prodId = req.params.productId;
-    Product.findByPk(prodId)
-        .then(product => {
-            if (!product) {
+    req.user.getProducts({ where: { id: prodId } })
+        //Product.findByPk(prodId)
+        .then(products => {
+            if (!products[0]) {
                 return res.redirect('/');
             }
             res.render('admin/edit-product', {
                 pageTitle: 'Edit Product',
                 path: "/admin/edit-product", editing: editMode,
-                product: product
+                product: products[0]
             });
         })
         .catch(err => {
