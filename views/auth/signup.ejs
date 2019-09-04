@@ -12,7 +12,7 @@
             <%= errorMessage %>
         </div>
         <% } %>
-        <form class="login-form" action="/login" method="POST">
+        <form class="login-form" action="/signup" method="POST" novalidate>
             <div class="form-control">
                 <label for="email">E-Mail</label>
                 <input class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>" type="email"
@@ -23,13 +23,13 @@
                 <input class="<%= validationErrors.find(e => e.param === 'password') ? 'invalid' : '' %>"
                     type="password" name="password" id="password" value="<%= oldInput.password %>">
             </div>
-
+            <div class="form-control">
+                <label for="confirmPassword">Confirm Password</label>
+                <input class="<%= validationErrors.find(e => e.param === 'confirmPassword') ? 'invalid' : '' %>"
+                    type="password" name="confirmPassword" id="confirmPassword" value="<%= oldInput.confirmPassword %>">
+            </div>
             <input name="_csrf" type="hidden" value="<%= csrfToken %>">
-
-            <button class="btn" type="submit">Login</button>
+            <button class="btn" type="submit">Signup</button>
         </form>
-        <div class="centered">
-            <a href="/reset">Reset Password</a>
-        </div>
     </main>
     <%- include('../includes/end.ejs') %>
