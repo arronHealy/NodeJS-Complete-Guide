@@ -12,7 +12,7 @@ const User = require('../models/user');
 
 const transporter = nodemailer.createTransport(sendGridTransport({
     auth: {
-        api_key: 'api_key'
+        api_key: 'api-key'
     }
 }));
 
@@ -115,7 +115,11 @@ exports.postLogin = (req, res, next) => {
                     res.redirect('/login');
                 });
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
 };
 
 exports.postSignup = (req, res, next) => {
@@ -156,13 +160,15 @@ exports.postSignup = (req, res, next) => {
             });
         })
         .catch(err => {
-            console.log(err);
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
         })
 };
 
 exports.postLogout = (req, res, next) => {
     req.session.destroy(err => {
-        console.log(err);
+        // console.log(err);
         res.redirect('/');
     });
 };
@@ -211,7 +217,11 @@ exports.postReset = (req, res, next) => {
                     `
                 });
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                const error = new Error(err);
+                error.httpStatusCode = 500;
+                return next(error);
+            });
     });
 };
 
@@ -236,7 +246,11 @@ exports.getNewPassword = (req, res, next) => {
                 passwordToken: token
             });
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
 };
 
 exports.postNewPassword = (req, res, next) => {
@@ -265,5 +279,9 @@ exports.postNewPassword = (req, res, next) => {
         .then(result => {
             res.redirect('/login');
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
 };
